@@ -1,0 +1,1402 @@
+<?xml version="1.0"?>
+<rdf:RDF xmlns="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology/"
+     xml:base="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology/"
+     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+     xmlns:untitled-ontology-10="http://www.semanticweb.org/lenovo/ontologies/2024/11/untitled-ontology-10#"
+     xmlns:owl="http://www.w3.org/2002/07/owl#"
+     xmlns:xml="http://www.w3.org/XML/1998/namespace"
+     xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+     xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+     xmlns:movie-ontology="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#">
+    <owl:Ontology rdf:about="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology">
+        <rdfs:comment># Skenario 7: Melihat daftar film yang disutradarai oleh Yandy Laurens
+
+PREFIX rdf: &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#&gt;
+PREFIX : &lt;http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#&gt;
+
+SELECT (STR(?Title) AS ?MovieTitle)
+       (STR(?Year) AS ?Yearr)
+WHERE {
+  ?movie a :Movie ;
+         :hasTitle ?Title ;
+         :releaseYear ?Year ;
+         :hasDirector :Yandy_Laurens . 
+}
+ORDER BY DESC(?Year)</rdfs:comment>
+        <rdfs:comment># Skenario 6: Melihat detail sebuah film
+
+PREFIX rdf: &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#&gt;
+PREFIX : &lt;http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#&gt;
+
+SELECT (STR(?Title) AS ?TitleValue)
+       ?Language
+       ?Studio
+       ?Director
+       ?Producer
+       ?Country
+WHERE {
+  ?movie a :Movie ;
+         :hasTitle ?Title ;
+         :hasLanguage ?Language ;
+         :producedBy ?Studio ;
+         :hasDirector ?Director ;
+         :hasProducer ?Producer ;
+         :productionCountry ?Country .
+  
+  FILTER (str(?Title) = &quot;Sore: Istri Dari Masa Depan&quot;)
+}</rdfs:comment>
+        <rdfs:comment># Skenario 5: Melihat review sebuah film
+
+PREFIX rdf: &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#&gt;
+PREFIX : &lt;http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#&gt;
+
+SELECT (STR(?ReviewText) AS ?Revieww)
+       (STR(?Rating) AS ?Ratingg)
+       (STR(?Likes) AS ?Likess)
+WHERE {
+  ?movie :hasTitle ?title ;
+         :hasReview ?Review .
+  ?Review :reviewText ?ReviewText ;
+           :reviewRating ?Rating ;
+           :likesCount ?Likes .
+  FILTER(STR(?title) = &quot;Sore: Istri Dari Masa Depan&quot;)
+}</rdfs:comment>
+        <rdfs:comment># Skenario 4: Melihat streaming platform sebuah film
+
+PREFIX rdf: &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#&gt;
+PREFIX : &lt;http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#&gt;
+
+SELECT (STR(?Title) AS ?TitleValue)
+       ?Platform
+WHERE {
+  ?movie a :Movie ;
+         :hasTitle ?Title ;
+         :availableOn ?Platform .
+  
+  FILTER (str(?Title) = &quot;Sore: Istri Dari Masa Depan&quot;)
+}</rdfs:comment>
+        <rdfs:comment># Skenario 8: Melihat film yang mirip
+
+PREFIX rdf: &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#&gt;
+PREFIX : &lt;http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#&gt;
+
+SELECT (STR(?similarTitle) AS ?SimilarMovieTitle) (STR(?Year) AS ?Yearr)
+WHERE {
+  ?sourceMovie a :Movie ;
+               :hasTitle ?sourceTitle .
+  FILTER (STR(?sourceTitle) = &quot;Sore: Istri Dari Masa Depan&quot;)
+  
+  { ?similarMovie :isSimilarTo ?sourceMovie . }
+  UNION
+  { ?sourceMovie :isSimilarTo ?similarMovie . }
+  
+  FILTER (?similarMovie != ?sourceMovie)
+  
+  ?similarMovie :hasTitle ?similarTitle ;
+                :releaseYear ?Year .
+}
+ORDER BY DESC(?Year)</rdfs:comment>
+        <rdfs:comment># Skenario 9: Pencarian Spesifik, Genre = Drama, Rating &gt; 3.5, Durasi &lt; 120, Sutradara = Yandy Laurens atau Aktor = Ringgo dan Nirina
+
+PREFIX : &lt;http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#&gt;
+PREFIX rdf: &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#&gt;
+PREFIX xsd: &lt;http://www.w3.org/2001/XMLSchema#&gt;
+
+SELECT (STR(?title) AS ?MovieTitle) (STR(?Rating) AS ?Ratingg) (STR(?Duration) AS ?Durationn)
+WHERE {
+  ?movie a :Movie ;
+         :hasTitle ?title ;
+         :hasGenre :Drama ;            
+         :averageRating ?Rating ;
+         :hasDuration ?Duration .
+  
+  FILTER(?Rating &gt; 3.5)                 
+  FILTER(?Duration &lt; 120)               
+
+  {
+     ?movie :hasDirector :Yandy_Laurens . 
+  }
+  UNION
+  {
+     ?movie :hasActor :Ringgo_Agus_Rahman ; 
+            :hasActor :Nirina_Zubir . 
+  }
+}
+ORDER BY DESC(?Rating)</rdfs:comment>
+        <rdfs:comment># Skenario 10: Melihat Film yg disutradarai Rudi dan aktor nicolas
+
+PREFIX : &lt;http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#&gt;
+PREFIX rdf: &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#&gt;
+PREFIX xsd: &lt;http://www.w3.org/2001/XMLSchema#&gt;
+
+SELECT 
+  (STR(?title) AS ?MovieTitle) 
+  (STR(?Rating) AS ?Ratingg) 
+  (STR(?Duration) AS ?Durationn)
+WHERE {
+  ?movie a :Movie ;
+         :hasTitle ?title ;
+         :hasGenre :Drama ;
+         :averageRating ?Rating ;
+         :hasDuration ?Duration .
+
+  FILTER(?Rating &gt; 3.5)
+  FILTER(?Duration &lt; 120)
+
+  {
+     ?movie :hasDirector :Rudi_Soedjarwo .
+  }
+  UNION
+  {
+     ?movie :hasActor :Nicholas_Saputra .
+  }
+}
+ORDER BY DESC(?Rating)</rdfs:comment>
+        <rdfs:comment># Skenario 1: Melihat daftar film dan informasinya
+
+PREFIX rdf: &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#&gt;
+PREFIX : &lt;http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#&gt;
+
+SELECT (STR(?Title) AS ?TitleValue)
+       (STR(?Year) AS ?YearValue)
+       (STR(?Duration) AS ?DurationValue)
+       (STR(?Rating) AS ?RatingValue)
+       (STR(?Synopsis) AS ?SynopsisValue)
+WHERE {
+  ?movie a :Movie ;
+         :hasTitle ?Title ;
+         :releaseYear ?Year ;
+         :hasDuration ?Duration ;
+         :averageRating ?Rating ;
+         :hasSynopsis ?Synopsis .
+}</rdfs:comment>
+        <rdfs:comment># Skenario 2: Melihat genre sebuah film
+
+PREFIX rdf: &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#&gt;
+PREFIX : &lt;http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#&gt;
+
+SELECT (STR(?Title) AS ?TitleValue)
+       ?Genre
+WHERE {
+  ?movie a :Movie ;
+         :hasTitle ?Title ;
+         :hasGenre ?Genre .
+  
+  FILTER (str(?Title) = &quot;Sore: Istri Dari Masa Depan&quot;)
+}</rdfs:comment>
+        <rdfs:comment># Skenario 3: Melihat pemeran sebuah film
+
+PREFIX rdf: &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#&gt;
+PREFIX : &lt;http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#&gt;
+
+SELECT (STR(?Title) AS ?TitleValue)
+       ?Actor
+WHERE {
+  ?movie a :Movie ;
+         :hasTitle ?Title ;
+         :hasActor ?Actor .
+  
+  FILTER (str(?Title) = &quot;Sore: Istri Dari Masa Depan&quot;)
+}</rdfs:comment>
+    </owl:Ontology>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Object Properties
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#availableOn -->
+
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#availableOn">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Movie"/>
+        <rdfs:range rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#StreamingService"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#hasActor -->
+
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#hasActor">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Movie"/>
+        <rdfs:range rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Actor"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#hasDirector -->
+
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#hasDirector">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Movie"/>
+        <rdfs:range rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Director"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#hasGenre -->
+
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#hasGenre">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Movie"/>
+        <rdfs:range rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Genre"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#hasLanguage -->
+
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#hasLanguage">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Movie"/>
+        <rdfs:range rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Language"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#hasProducer -->
+
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#hasProducer">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Movie"/>
+        <rdfs:range rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Producer"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#hasReview -->
+
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#hasReview">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Movie"/>
+        <rdfs:range rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Review"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#hasTheme -->
+
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#hasTheme">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Movie"/>
+        <rdfs:range rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Theme"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#isSimilarTo -->
+
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#isSimilarTo">
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#SymmetricProperty"/>
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Movie"/>
+        <rdfs:range rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Movie"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#producedBy -->
+
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#producedBy">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Movie"/>
+        <rdfs:range rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#ProductionStudio"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#productionCountry -->
+
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#productionCountry">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Movie"/>
+        <rdfs:range rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Country"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#releasedAt -->
+
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#releasedAt">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Movie"/>
+        <rdfs:range rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#ReleaseEvent"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Data properties
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#averageRating -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#averageRating">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Movie"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#decimal"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#hasDuration -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#hasDuration">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Movie"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#integer"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#hasSynopsis -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#hasSynopsis">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Movie"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#hasTitle -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#hasTitle">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Movie"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#likesCount -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#likesCount">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Review"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#integer"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#releaseYear -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#releaseYear">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Movie"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#integer"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#reviewRating -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#reviewRating">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Review"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#decimal"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#reviewText -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#reviewText">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Review"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Classes
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Actor -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Actor">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Person"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Concept -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Concept"/>
+    
+
+
+    <!-- http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Country -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Country">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Place"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#CreativeWork -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#CreativeWork"/>
+    
+
+
+    <!-- http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Crew -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Crew">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Person"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Director -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Director">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Crew"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Event -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Event"/>
+    
+
+
+    <!-- http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Genre -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Genre">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Concept"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Language -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Language"/>
+    
+
+
+    <!-- http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Movie -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Movie">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#CreativeWork"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Organization -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Organization"/>
+    
+
+
+    <!-- http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Person -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Person"/>
+    
+
+
+    <!-- http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Place -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Place"/>
+    
+
+
+    <!-- http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Producer -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Producer">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Crew"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#ProductionStudio -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#ProductionStudio">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Organization"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#ReleaseEvent -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#ReleaseEvent">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Event"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Review -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Review">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#CreativeWork"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#StreamingService -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#StreamingService">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Organization"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Theme -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Theme">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Concept"/>
+    </owl:Class>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Individuals
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#AADC -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#AADC">
+        <rdf:type rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Movie"/>
+        <movie-ontology:hasActor rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Dian_Sastro"/>
+        <movie-ontology:hasActor rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Ladya_Cheryl"/>
+        <movie-ontology:hasActor rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Nicholas_Saputra"/>
+        <movie-ontology:hasDirector rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Rudi_Soedjarwo"/>
+        <movie-ontology:hasGenre rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Drama"/>
+        <movie-ontology:hasLanguage rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Indonesian"/>
+        <movie-ontology:isSimilarTo rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Sore:_Istri_Dari_Masa_Depan"/>
+        <movie-ontology:producedBy rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Cerita_Films"/>
+        <movie-ontology:productionCountry rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Indonesia"/>
+        <movie-ontology:averageRating rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">4.1</movie-ontology:averageRating>
+        <movie-ontology:hasDuration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">100</movie-ontology:hasDuration>
+        <movie-ontology:hasSynopsis>Seorang gadis SMA populer harus memilih apakah ia ingin tetap menjadi bagian dari gengnya atau jatuh cinta pada anak lelaki yang mencintai sastra di sekolahnya.</movie-ontology:hasSynopsis>
+        <movie-ontology:hasTitle>AADC</movie-ontology:hasTitle>
+        <movie-ontology:releaseYear rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">2014</movie-ontology:releaseYear>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#ASEAN_Film_Festival -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#ASEAN_Film_Festival">
+        <rdf:type rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#ReleaseEvent"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Amanda_Rawles -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Amanda_Rawles">
+        <rdf:type rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Actor"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Anggia_Kharisma -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Anggia_Kharisma">
+        <rdf:type rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Producer"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Animation -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Animation">
+        <rdf:type rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Genre"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Apple_TV -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Apple_TV">
+        <rdf:type rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#StreamingService"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Cerita_Films -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Cerita_Films">
+        <rdf:type rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#ProductionStudio"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Chicco_Kurniawan -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Chicco_Kurniawan">
+        <rdf:type rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Actor"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#CoMix_Wave_Films -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#CoMix_Wave_Films">
+        <rdf:type rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#ProductionStudio"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Comedy -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Comedy">
+        <rdf:type rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Genre"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Crunchyroll -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Crunchyroll">
+        <rdf:type rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#StreamingService"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Damien_Chazelle -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Damien_Chazelle">
+        <rdf:type rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Director"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Dian_Sastro -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Dian_Sastro">
+        <rdf:type rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Actor"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Dion_Wiyoko -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Dion_Wiyoko">
+        <rdf:type rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Actor"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Drama -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Drama">
+        <rdf:type rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Genre"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Emma_Stone -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Emma_Stone">
+        <rdf:type rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Actor"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#English -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#English">
+        <rdf:type rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Language"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Ernest_Prakasa -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Ernest_Prakasa">
+        <rdf:type rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Producer"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Family -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Family">
+        <rdf:type rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Genre"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Fantasy -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Fantasy">
+        <rdf:type rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Genre"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Genki_Kawamura -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Genki_Kawamura">
+        <rdf:type rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Producer"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Indonesia -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Indonesia">
+        <rdf:type rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Country"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Indonesian -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Indonesian">
+        <rdf:type rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Language"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Indonesian_Film_Festival -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Indonesian_Film_Festival">
+        <rdf:type rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#ReleaseEvent"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#JC1 -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#JC1">
+        <rdf:type rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Review"/>
+        <movie-ontology:likesCount rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">1145</movie-ontology:likesCount>
+        <movie-ontology:reviewText rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">4.5</movie-ontology:reviewText>
+        <movie-ontology:reviewText>Christopher Nolan literally wishes he made a non-linear movie this good</movie-ontology:reviewText>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#JC2 -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#JC2">
+        <rdf:type rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Review"/>
+        <movie-ontology:likesCount rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">823</movie-ontology:likesCount>
+        <movie-ontology:reviewRating rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">5</movie-ontology:reviewRating>
+        <movie-ontology:reviewText>scene motor galon is THE BEST SCENE IN INDONESIAN CINEMA HISTORY</movie-ontology:reviewText>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#JC3 -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#JC3">
+        <rdf:type rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Review"/>
+        <movie-ontology:likesCount rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">726</movie-ontology:likesCount>
+        <movie-ontology:reviewRating rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">4.5</movie-ontology:reviewRating>
+        <movie-ontology:reviewText>Sheila Dara shouting “cinematic experience!”….damn…pure poetry.</movie-ontology:reviewText>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Japan -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Japan">
+        <rdf:type rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Country"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Japanese -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Japanese">
+        <rdf:type rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Language"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Jatuh_Cinta_Seperti_di_Film-Film -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Jatuh_Cinta_Seperti_di_Film-Film">
+        <rdf:type rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Movie"/>
+        <movie-ontology:availableOn rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Netflix"/>
+        <movie-ontology:hasActor rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Nirina_Zubir"/>
+        <movie-ontology:hasActor rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Ringgo_Agus_Rahman"/>
+        <movie-ontology:hasDirector rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Yandy_Laurens"/>
+        <movie-ontology:hasGenre rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Comedy"/>
+        <movie-ontology:hasGenre rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Drama"/>
+        <movie-ontology:hasGenre rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Romance"/>
+        <movie-ontology:hasLanguage rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Indonesian"/>
+        <movie-ontology:hasProducer rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Ernest_Prakasa"/>
+        <movie-ontology:hasReview rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#JC1"/>
+        <movie-ontology:hasReview rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#JC2"/>
+        <movie-ontology:hasReview rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#JC3"/>
+        <movie-ontology:isSimilarTo rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Sore:_Istri_Dari_Masa_Depan"/>
+        <movie-ontology:producedBy rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Cerita_Films"/>
+        <movie-ontology:productionCountry rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Indonesia"/>
+        <movie-ontology:releasedAt rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#ASEAN_Film_Festival"/>
+        <movie-ontology:releasedAt rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Jogja-NETPAC_Asian_Film_Festival"/>
+        <movie-ontology:releasedAt rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#San_Diego_Asian_Film_Festival"/>
+        <movie-ontology:averageRating rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">4.1</movie-ontology:averageRating>
+        <movie-ontology:hasDuration rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">118</movie-ontology:hasDuration>
+        <movie-ontology:hasSynopsis>Bagus, a screenwriter, reunites with his high school friend and crush, Hana, who is still grieving from the loss of her husband. He wants to convince her to fall in love once again, just like in the movies.</movie-ontology:hasSynopsis>
+        <movie-ontology:hasTitle>Jatuh Cinta Seperti di Film-Film</movie-ontology:hasTitle>
+        <movie-ontology:releaseYear rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">2023</movie-ontology:releaseYear>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Jogja-NETPAC_Asian_Film_Festival -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Jogja-NETPAC_Asian_Film_Festival">
+        <rdf:type rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#ReleaseEvent"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#John_Legend -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#John_Legend">
+        <rdf:type rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Actor"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Jordan_Horowitz -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Jordan_Horowitz">
+        <rdf:type rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Producer"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#KC1 -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#KC1">
+        <rdf:type rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Review"/>
+        <movie-ontology:likesCount rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">75</movie-ontology:likesCount>
+        <movie-ontology:reviewRating rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">4</movie-ontology:reviewRating>
+        <movie-ontology:reviewText>Bikin film keluarga itu gampang sih, yang susah itu bikin film keluarga yang efeknya bisa kena ke hati ke semua anggota keluarga termasuk penonton dewasa yang biasanya gagal dijangkau secara emosi, nah, &quot;Keluarga Cemara&quot; sukses melakukan tugas sulit ini dengan caranya yang luar biasa.</movie-ontology:reviewText>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#KC2 -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#KC2">
+        <rdf:type rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Review"/>
+        <movie-ontology:likesCount rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">48</movie-ontology:likesCount>
+        <movie-ontology:reviewRating rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">4</movie-ontology:reviewRating>
+        <movie-ontology:reviewText>Harta yang paling berharga adalah keluarga *sambil terisak-isak*</movie-ontology:reviewText>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#KC3 -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#KC3">
+        <rdf:type rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Review"/>
+        <movie-ontology:likesCount rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">46</movie-ontology:likesCount>
+        <movie-ontology:reviewRating rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">4</movie-ontology:reviewRating>
+        <movie-ontology:reviewText>Belum sempet nonton karya Yandy Laurens yang terbaru &quot;Sore&quot; jadi nonton karyanya yang lain dulu.</movie-ontology:reviewText>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Keluarga_Cemara -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Keluarga_Cemara">
+        <rdf:type rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Movie"/>
+        <movie-ontology:availableOn rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Netflix"/>
+        <movie-ontology:hasActor rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Nirina_Zubir"/>
+        <movie-ontology:hasActor rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Ringgo_Agus_Rahman"/>
+        <movie-ontology:hasDirector rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Yandy_Laurens"/>
+        <movie-ontology:hasGenre rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Drama"/>
+        <movie-ontology:hasGenre rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Family"/>
+        <movie-ontology:hasLanguage rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Indonesian"/>
+        <movie-ontology:hasProducer rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Anggia_Kharisma"/>
+        <movie-ontology:hasReview rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#KC1"/>
+        <movie-ontology:hasReview rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#KC2"/>
+        <movie-ontology:hasReview rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#KC3"/>
+        <movie-ontology:isSimilarTo rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Jatuh_Cinta_Seperti_di_Film-Film"/>
+        <movie-ontology:isSimilarTo rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#1_Kakak_7_Ponakan"/>
+        <movie-ontology:isSimilarTo rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Sore:_Istri_Dari_Masa_Depan"/>
+        <movie-ontology:producedBy rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Visinema_Pictures"/>
+        <movie-ontology:productionCountry rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Indonesia"/>
+        <movie-ontology:releasedAt rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Jogja-NETPAC_Asian_Film_Festival"/>
+        <movie-ontology:averageRating rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">3.5</movie-ontology:averageRating>
+        <movie-ontology:hasDuration rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">110</movie-ontology:hasDuration>
+        <movie-ontology:hasSynopsis>After bankruptcy, Abah and Emak must adapt to a new life with their children in a remote village.</movie-ontology:hasSynopsis>
+        <movie-ontology:hasTitle>Keluarga Cemara</movie-ontology:hasTitle>
+        <movie-ontology:releaseYear rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">2018</movie-ontology:releaseYear>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#LA1 -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#LA1">
+        <rdf:type rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Review"/>
+        <movie-ontology:likesCount rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">38585</movie-ontology:likesCount>
+        <movie-ontology:reviewRating rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">5</movie-ontology:reviewRating>
+        <movie-ontology:reviewText>this cured my depression and brought it back full force in the span of 2 hours</movie-ontology:reviewText>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#LA2 -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#LA2">
+        <rdf:type rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Review"/>
+        <movie-ontology:likesCount rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">21220</movie-ontology:likesCount>
+        <movie-ontology:reviewRating rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">4.5</movie-ontology:reviewRating>
+        <movie-ontology:reviewText>Love this movie more than I love myself</movie-ontology:reviewText>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#LA3 -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#LA3">
+        <rdf:type rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Review"/>
+        <movie-ontology:likesCount rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">17993</movie-ontology:likesCount>
+        <movie-ontology:reviewRating rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">5</movie-ontology:reviewRating>
+        <movie-ontology:reviewText>I&apos;ve taken all of your criticisms into account and have determined that you&apos;re all wrong.</movie-ontology:reviewText>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#La_La_Land -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#La_La_Land">
+        <rdf:type rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Movie"/>
+        <movie-ontology:availableOn rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Apple_TV"/>
+        <movie-ontology:availableOn rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Netflix"/>
+        <movie-ontology:availableOn rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Prime_Video"/>
+        <movie-ontology:hasActor rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Emma_Stone"/>
+        <movie-ontology:hasActor rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#John_Legend"/>
+        <movie-ontology:hasActor rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Ryan_Gosling"/>
+        <movie-ontology:hasDirector rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Damien_Chazelle"/>
+        <movie-ontology:hasGenre rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Comedy"/>
+        <movie-ontology:hasGenre rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Drama"/>
+        <movie-ontology:hasGenre rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Music"/>
+        <movie-ontology:hasGenre rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Romance"/>
+        <movie-ontology:hasLanguage rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#English"/>
+        <movie-ontology:hasProducer rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Jordan_Horowitz"/>
+        <movie-ontology:hasReview rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#LA1"/>
+        <movie-ontology:hasReview rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#LA2"/>
+        <movie-ontology:hasReview rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#LA3"/>
+        <movie-ontology:producedBy rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Summit_Entertainment"/>
+        <movie-ontology:productionCountry rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#USA"/>
+        <movie-ontology:averageRating rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">4.1</movie-ontology:averageRating>
+        <movie-ontology:hasDuration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">129</movie-ontology:hasDuration>
+        <movie-ontology:hasSynopsis>Mia, an aspiring actress, serves lattes to movie stars in between auditions and Sebastian, a jazz musician, scrapes by playing cocktail party gigs in dingy bars, but as success mounts they are faced with decisions that begin to fray the fragile fabric of their love affair, and the dreams they worked so hard to maintain in each other threaten to rip them apart.</movie-ontology:hasSynopsis>
+        <movie-ontology:hasTitle>La La Land</movie-ontology:hasTitle>
+        <movie-ontology:releaseYear rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">2016</movie-ontology:releaseYear>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Ladya_Cheryl -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Ladya_Cheryl">
+        <rdf:type rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Actor"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Lavesh_Samtani -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Lavesh_Samtani">
+        <rdf:type rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Producer"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Makoto_Shinkai -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Makoto_Shinkai">
+        <rdf:type rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Director"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Mone_Kamishiraishi -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Mone_Kamishiraishi">
+        <rdf:type rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Actor"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Moving_Relationship_Stories -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Moving_Relationship_Stories">
+        <rdf:type rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Theme"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Music -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Music">
+        <rdf:type rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Genre"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Netflix -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Netflix">
+        <rdf:type rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#StreamingService"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Nicholas_Saputra -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Nicholas_Saputra">
+        <rdf:type rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Actor"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Nirina_Zubir -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Nirina_Zubir">
+        <rdf:type rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Actor"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Prime_Video -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Prime_Video">
+        <rdf:type rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#StreamingService"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Ringgo_Agus_Rahman -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Ringgo_Agus_Rahman">
+        <rdf:type rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Actor"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Romance -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Romance">
+        <rdf:type rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Genre"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Rudi_Soedjarwo -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Rudi_Soedjarwo">
+        <rdf:type rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Director"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Ryan_Gosling -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Ryan_Gosling">
+        <rdf:type rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Actor"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Ryunosuke_Kamiki -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Ryunosuke_Kamiki">
+        <rdf:type rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Actor"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#SO1 -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#SO1">
+        <rdf:type rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Review"/>
+        <movie-ontology:likesCount rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">4536</movie-ontology:likesCount>
+        <movie-ontology:reviewRating rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">5</movie-ontology:reviewRating>
+        <movie-ontology:reviewText>Saya bukan kritikus film, jadi izinkan saya berbagi perasaan dan pengalaman pribadi saja untuk menjawab pertanyaan ini. Tentang film Sore, amat jarang ada film yang membuat kita kesulitan menampung luapan pikiran dan berbagai emosi sekaligus. Ia memenuhi indra, logika, dan jiwa pada saat bersamaan, lalu meninggalkan jejak rasa yang kuat dan bertahan begitu lama.</movie-ontology:reviewText>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#SO2 -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#SO2">
+        <rdf:type rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Review"/>
+        <movie-ontology:likesCount rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">1188</movie-ontology:likesCount>
+        <movie-ontology:reviewRating rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">5</movie-ontology:reviewRating>
+        <movie-ontology:reviewText>Trust me, this film is best experienced if you go in knowing nothing. Don’t read anything about the plot. Let it surprise you.</movie-ontology:reviewText>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#SO3 -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#SO3">
+        <rdf:type rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Review"/>
+        <movie-ontology:likesCount rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">740</movie-ontology:likesCount>
+        <movie-ontology:reviewRating rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">5</movie-ontology:reviewRating>
+        <movie-ontology:reviewText>Konsep time loop yang dikemas sebenarnya standar, tapi di tangan Yandy Laurens berubah menjadi sangat ajaib. Seperti versi series, versi film justru berputar lebih luas dalam mengeksplorasi tentang waktu, usaha, sia-sia, masa lalu, dan cinta, yang sama sekali gak gua ekspektasikan bisa seindah itu ceritanya. Yang bikin gua gak habis pikir adalah bagaimana Yandy Laurens mengolah konsep time loop dalam 3 bab layaknya lukisan yang sangat cantik: visual, color grading, senja, quotes hidup, autentik, music scoring, pemandangan Kroasia, sampai keindahan fenomena langka seperti aurora hijau dan merah turut hadir dalam melengkapi suasana. Konsep waktunya terasa lebih matang dari versi series, dan setiap kesempatan kedua itu hilang, waktu semakin bergerak menunjukkan eksistensinya, terus berputar, terus bergerak, terus berjalan, sampai semesta akhirnya mempertemukannya kembali.</movie-ontology:reviewText>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#San_Diego_Asian_Film_Festival -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#San_Diego_Asian_Film_Festival">
+        <rdf:type rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#ReleaseEvent"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Science_Fiction -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Science_Fiction">
+        <rdf:type rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Genre"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Sheila_Dara -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Sheila_Dara">
+        <rdf:type rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Actor"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Song_and_Dance -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Song_and_Dance">
+        <rdf:type rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Theme"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Summit_Entertainment -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Summit_Entertainment">
+        <rdf:type rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#ProductionStudio"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Suryana_Paramita -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Suryana_Paramita">
+        <rdf:type rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Producer"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Telluride_Film_Festival -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Telluride_Film_Festival">
+        <rdf:type rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#ReleaseEvent"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#USA -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#USA">
+        <rdf:type rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Country"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Venice_Film_Festival -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Venice_Film_Festival">
+        <rdf:type rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#ReleaseEvent"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Visinema_Pictures -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Visinema_Pictures">
+        <rdf:type rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#ProductionStudio"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#YN1 -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#YN1">
+        <rdf:type rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Review"/>
+        <movie-ontology:likesCount rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">9446</movie-ontology:likesCount>
+        <movie-ontology:reviewRating rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">5</movie-ontology:reviewRating>
+        <movie-ontology:reviewText>It&apos;s the feeling of never wanting a dream to end, desperately trying to go back to sleep hoping that your dream would somehow pick up where it had left off.</movie-ontology:reviewText>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#YN2 -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#YN2">
+        <rdf:type rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Review"/>
+        <movie-ontology:likesCount rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">9395</movie-ontology:likesCount>
+        <movie-ontology:reviewRating rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">4</movie-ontology:reviewRating>
+        <movie-ontology:reviewText>I, too, always wake up crying while grabbing my boobs.</movie-ontology:reviewText>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#YN3 -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#YN3">
+        <rdf:type rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Review"/>
+        <movie-ontology:likesCount rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">4484</movie-ontology:likesCount>
+        <movie-ontology:reviewRating rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">5</movie-ontology:reviewRating>
+        <movie-ontology:reviewText>This is one of the most original, frustrating, and fucking brilliant films I&apos;ve ever seen. If this doesn&apos;t get a best animated film nomination I truly will give up on the academy. Please find and watch Your Name.</movie-ontology:reviewText>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Yandy_Laurens -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Yandy_Laurens">
+        <rdf:type rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Director"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Your_Name. -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Your_Name.">
+        <rdf:type rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Movie"/>
+        <movie-ontology:availableOn rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Apple_TV"/>
+        <movie-ontology:availableOn rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Crunchyroll"/>
+        <movie-ontology:availableOn rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Prime_Video"/>
+        <movie-ontology:hasActor rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Mone_Kamishiraishi"/>
+        <movie-ontology:hasActor rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Ryunosuke_Kamiki"/>
+        <movie-ontology:hasDirector rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Makoto_Shinkai"/>
+        <movie-ontology:hasGenre rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Animation"/>
+        <movie-ontology:hasGenre rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Drama"/>
+        <movie-ontology:hasGenre rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Romance"/>
+        <movie-ontology:hasLanguage rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Japanese"/>
+        <movie-ontology:hasProducer rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Genki_Kawamura"/>
+        <movie-ontology:hasReview rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#YN1"/>
+        <movie-ontology:hasReview rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#YN2"/>
+        <movie-ontology:hasReview rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#YN3"/>
+        <movie-ontology:isSimilarTo rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Sore:_Istri_Dari_Masa_Depan"/>
+        <movie-ontology:producedBy rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#CoMix_Wave_Films"/>
+        <movie-ontology:productionCountry rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Japan"/>
+        <movie-ontology:averageRating rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">4.2</movie-ontology:averageRating>
+        <movie-ontology:hasDuration rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">106</movie-ontology:hasDuration>
+        <movie-ontology:hasSynopsis>High schoolers Mitsuha and Taki are complete strangers living separate lives. But one night, they suddenly switch places. Mitsuha wakes up in Taki’s body, and he in hers. This bizarre occurrence continues to happen randomly, and the two must adjust their lives around each other.</movie-ontology:hasSynopsis>
+        <movie-ontology:hasTitle>Your Name.</movie-ontology:hasTitle>
+        <movie-ontology:releaseYear rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">2016</movie-ontology:releaseYear>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#1K1 -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#1K1">
+        <rdf:type rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Review"/>
+        <movie-ontology:likesCount rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">2006</movie-ontology:likesCount>
+        <movie-ontology:reviewRating rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">4</movie-ontology:reviewRating>
+        <movie-ontology:reviewText>1 kakak 5 ponakan 1 orang naif 1 orang kontol</movie-ontology:reviewText>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#1K2 -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#1K2">
+        <rdf:type rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Review"/>
+        <movie-ontology:likesCount rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">626</movie-ontology:likesCount>
+        <movie-ontology:reviewRating rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">4</movie-ontology:reviewRating>
+        <movie-ontology:reviewText>find yourself a girl like maurin</movie-ontology:reviewText>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#1K3 -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#1K3">
+        <rdf:type rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Review"/>
+        <movie-ontology:likesCount rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">408</movie-ontology:likesCount>
+        <movie-ontology:reviewRating rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">2.5</movie-ontology:reviewRating>
+        <movie-ontology:reviewText>it was so weird to see an indonesian family saying sorry and thanks to each other... like you weren&apos;t supposed to be having a healthy relationship with your family... i thought that was an unspoken rule</movie-ontology:reviewText>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#1_Kakak_7_Ponakan -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#1_Kakak_7_Ponakan">
+        <rdf:type rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Movie"/>
+        <movie-ontology:availableOn rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Netflix"/>
+        <movie-ontology:hasActor rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Amanda_Rawles"/>
+        <movie-ontology:hasActor rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Chicco_Kurniawan"/>
+        <movie-ontology:hasDirector rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Yandy_Laurens"/>
+        <movie-ontology:hasGenre rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Drama"/>
+        <movie-ontology:hasGenre rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Family"/>
+        <movie-ontology:hasLanguage rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Indonesian"/>
+        <movie-ontology:hasProducer rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Lavesh_Samtani"/>
+        <movie-ontology:hasReview rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#1K1"/>
+        <movie-ontology:hasReview rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#1K2"/>
+        <movie-ontology:hasReview rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#1K3"/>
+        <movie-ontology:isSimilarTo rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Jatuh_Cinta_Seperti_di_Film-Film"/>
+        <movie-ontology:isSimilarTo rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Sore:_Istri_Dari_Masa_Depan"/>
+        <movie-ontology:producedBy rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Cerita_Films"/>
+        <movie-ontology:productionCountry rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Indonesia"/>
+        <movie-ontology:releasedAt rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#ASEAN_Film_Festival"/>
+        <movie-ontology:releasedAt rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Indonesian_Film_Festival"/>
+        <movie-ontology:releasedAt rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Jogja-NETPAC_Asian_Film_Festival"/>
+        <movie-ontology:averageRating rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">3.7</movie-ontology:averageRating>
+        <movie-ontology:hasDuration rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">131</movie-ontology:hasDuration>
+        <movie-ontology:hasSynopsis>After the untimely death of his older sister and her husband, a struggling young architect suddenly becomes a “single parent” for his nieces and nephews. When the opportunity for a better life arises, he must choose between his love life, career, or his family.</movie-ontology:hasSynopsis>
+        <movie-ontology:hasTitle>1 Kakak 7 Ponakan</movie-ontology:hasTitle>
+        <movie-ontology:releaseYear rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">2024</movie-ontology:releaseYear>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Sore:_Istri_Dari_Masa_Depan -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Sore:_Istri_Dari_Masa_Depan">
+        <rdf:type rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Movie"/>
+        <movie-ontology:hasActor rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Dion_Wiyoko"/>
+        <movie-ontology:hasActor rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Sheila_Dara"/>
+        <movie-ontology:hasDirector rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Yandy_Laurens"/>
+        <movie-ontology:hasGenre rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Drama"/>
+        <movie-ontology:hasGenre rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Fantasy"/>
+        <movie-ontology:hasGenre rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Romance"/>
+        <movie-ontology:hasGenre rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Science_Fiction"/>
+        <movie-ontology:hasLanguage rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Indonesian"/>
+        <movie-ontology:hasProducer rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Suryana_Paramita"/>
+        <movie-ontology:hasReview rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#SO1"/>
+        <movie-ontology:hasReview rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#SO2"/>
+        <movie-ontology:hasReview rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#SO3"/>
+        <movie-ontology:producedBy rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Cerita_Films"/>
+        <movie-ontology:productionCountry rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2024/11/movie-ontology#Indonesia"/>
+        <movie-ontology:averageRating rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">4.2</movie-ontology:averageRating>
+        <movie-ontology:hasDuration rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">119</movie-ontology:hasDuration>
+        <movie-ontology:hasSynopsis>A young man living alone in Croatia encounters a woman who claims to be his wife from the future, sent on a mission to help him correct his bad habits and improve his lifestyle.</movie-ontology:hasSynopsis>
+        <movie-ontology:hasTitle>Sore: Istri Dari Masa Depan</movie-ontology:hasTitle>
+        <movie-ontology:releaseYear rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">2025</movie-ontology:releaseYear>
+    </owl:NamedIndividual>
+</rdf:RDF>
+
+
+
+<!-- Generated by the OWL API (version 4.2.6.20160910-2108) https://github.com/owlcs/owlapi -->
+
